@@ -1,18 +1,17 @@
 package com.endava.pocu.carpark.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "spots")
 public class Spot {
     @Id
-    @GeneratedValue
-    private Long spot_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "spot_id")
+    private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Double price;
 
     @Column(nullable = false)
@@ -39,11 +38,7 @@ public class Spot {
     }
 
     public void setPrice(Double price) {
-        if(price == null) {
-            throw new RuntimeException("Spot price is null.");
-        } else {
-            this.price = price;
-        }
+        this.price = price;
     }
 
     public Boolean getUsed() {
@@ -68,5 +63,13 @@ public class Spot {
 
     public void setDateEnd(LocalDateTime dateEnd) {
         this.dateEnd = dateEnd;
+    }
+
+    public Long getSpot_id() {
+        return id;
+    }
+
+    public void setSpot_id(Long id) {
+        this.id = id;
     }
 }

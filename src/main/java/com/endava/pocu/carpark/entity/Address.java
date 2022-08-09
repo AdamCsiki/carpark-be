@@ -3,10 +3,12 @@ package com.endava.pocu.carpark.entity;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "adresses")
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long address_id;
+    @Column(name = "address_id")
+    private Long id;
 
     @Column(nullable = false)
     private String city;
@@ -61,5 +63,13 @@ public class Address {
         } else {
             this.number = number;
         }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -4,10 +4,12 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    @Column(name = "user_id")
+    private Long id;
 
     @Column(length = 50)
     private String firstName;
@@ -18,34 +20,26 @@ public class User {
     @Column(nullable = false)
     private Integer age;
 
-    @Column(length = 14)
-    private String cnp;
+    @Column(nullable = true, length = 20)
+    private String email;
+
+    @Column(nullable = true)
+    private String phoneNumber;
+
+    @OneToOne(orphanRemoval = true)
+    private Address address;
 
     @OneToMany
-    @JoinTable(
-            name = "user_address",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "address_id")
-    )
-    private List<Address> addresses;
-
-    @OneToMany
-    @JoinTable(
-            name = "user_spot",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "spot_id")
-    )
     private List<Spot> spots;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, Integer age, String cnp, List<Address> addresses) {
+    public User(String firstName, String lastName, Integer age, Address address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-        this.cnp = cnp;
-        this.addresses = addresses;
+        this.address = address;
     }
 
     public String getFirstName() {
@@ -90,25 +84,43 @@ public class User {
         }
     }
 
-    public String getCnp() {
-        return cnp;
+    public Address getAddresses() {
+        return address;
     }
 
-    public void setCnp(String cnp) {
-        if(cnp == null) {
-            throw new RuntimeException("User's cnp should not be null.");
-        } else if(cnp.isBlank()) {
-            throw new RuntimeException("User`s cnp should not be empty.");
-        } else {
-            this.cnp = cnp;
-        }
+    public void setAddresses(Address address) {
+        this.address = address;
     }
 
-    public List<Address> getAddresses() {
-        return addresses;
+    public Long getId() {
+        return id;
     }
 
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public List<Spot> getSpots() {
+        return spots;
+    }
+
+    public void setSpots(List<Spot> spots) {
+        this.spots = spots;
     }
 }

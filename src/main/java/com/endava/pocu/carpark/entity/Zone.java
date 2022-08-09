@@ -3,10 +3,12 @@ package com.endava.pocu.carpark.entity;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "zones")
 public class Zone {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long zone_id;
+    @Column(name = "zone_id")
+    private Long id;
 
     @Column(length = 32)
     private String name;
@@ -21,7 +23,6 @@ public class Zone {
     private Integer numberOfSpots;
 
     public Zone() {
-
     }
 
     public Zone(String name, Integer floor, Boolean isFull, Integer numberOfSpots) {
@@ -79,5 +80,13 @@ public class Zone {
         } else {
             this.numberOfSpots = numberOfSpots;
         }
+    }
+
+    public Long getZone_id() {
+        return id;
+    }
+
+    public void setZone_id(Long id) {
+        this.id = id;
     }
 }
