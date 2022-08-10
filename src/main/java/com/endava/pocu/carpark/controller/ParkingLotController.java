@@ -1,7 +1,11 @@
 package com.endava.pocu.carpark.controller;
 
 import com.endava.pocu.carpark.entity.ParkingLot;
+import com.endava.pocu.carpark.entity.Spot;
+import com.endava.pocu.carpark.entity.User;
 import com.endava.pocu.carpark.service.ParkingLotService;
+import com.endava.pocu.carpark.service.SpotService;
+import com.endava.pocu.carpark.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +16,10 @@ import java.util.List;
 public class ParkingLotController {
     @Autowired
     private ParkingLotService parkingLotService;
+    @Autowired
+    private SpotService spotService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping(path = "/")
     public void post(@RequestBody ParkingLot parkingLot) {
@@ -19,27 +27,50 @@ public class ParkingLotController {
     }
 
     @GetMapping(path = "/{id}")
-    public ParkingLot get(@PathVariable Long id) {
+    public ParkingLot getParkingLot(@PathVariable Long id) {
         return parkingLotService.getParkingLot(id);
     }
 
-    @PutMapping(path = "/")
-    public void put(@RequestBody Long id, @RequestBody ParkingLot parkingLot) {
-        parkingLotService.putParkingLot(id, parkingLot);
+    @GetMapping(path = "/{id}/spots")
+    public List<Spot> getParkingLotSpots(@PathVariable Long id) {
+        return spotService.getAllSpotsByParkingLot(getParkingLot(id));
     }
 
     @GetMapping(path = "/")
-    public List<ParkingLot> getAll() {
+    public List<ParkingLot> getAllParkingLots() {
         return parkingLotService.getAllParkingLots();
     }
 
+    @GetMapping(path = "/{parkingId}/users")
+    public List<User> getParkingLotUsers(@PathVariable Long parkingId) {
+        return parkingLotService.getParkingLot(parkingId).getRegisteredUsers();
+    }
+
+    @PutMapping(path = "/{parkingId}/users/{userId}")
+    public void registerUser(@PathVariable Long parkingId, @PathVariable Long userId) {
+        User user = userService.getUser(userId);
+
+        ParkingLot parkingLot = parkingLotService.getParkingLot(parkingId);
+        parkingLot.getRegisteredUsers().add(user);
+
+        parkingLotService.postParkingLot(parkingLot);
+    }
+
+    @PutMapping(path = "/{parkingId}/users")
+    public void registerUser(@PathVariable Long parkingId, @RequestBody User user) {
+        ParkingLot parkingLot = parkingLotService.getParkingLot(parkingId);
+        parkingLot.getRegisteredUsers().add(user);
+        parkingLotService.postParkingLot(parkingLot);
+    }
+
+
     @DeleteMapping(path = "/{id}")
-    public void deleteById(@PathVariable Long id) {
+    public void deleteParkingLotById(@PathVariable Long id) {
         parkingLotService.deleteParkingLotById(id);
     }
 
     @DeleteMapping(path = "/")
-    public void delete(@RequestBody ParkingLot parkingLot) {
+    public void deleteParkingLot(@RequestBody ParkingLot parkingLot) {
         parkingLotService.deleteParkingLot(parkingLot);
     }
 }

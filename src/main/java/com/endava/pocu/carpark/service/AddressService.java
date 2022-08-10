@@ -25,7 +25,7 @@ public class AddressService {
         LOGGER.info("Trying to post address: " + address);
         if(address == null) {
             LOGGER.info("Failed");
-            throw new RuntimeException();
+            throw new RuntimeException("Address should not be null.");
         } else {
             addressRepository.save(address);
         }

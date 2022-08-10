@@ -1,41 +1,57 @@
 package com.endava.pocu.carpark.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "parkings")
+@AllArgsConstructor
 public class ParkingLot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "parking_id")
     private Long id;
 
     @Column(length = 32)
     private String name;
 
-    @Column(length = 32, nullable = true)
+    @Column(length = 32)
     private String companyName;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
 
-    @OneToMany
-    private List<Zone> zones;
+    @OneToMany(mappedBy = "parkingLot", targetEntity = Spot.class, cascade = CascadeType.ALL)
+    private Set<Spot> spots;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "parking_users",
+            name = "registered_users",
             joinColumns = @JoinColumn(name = "parking_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<User> users;
+    @JsonIgnore
+    private List<User> registeredUsers;
 
     public ParkingLot() {
+    }
+
+    public ParkingLot(String name, String companyName, Address address, Set<Spot> spots, List<User> users) {
+        this.name = name;
+        this.companyName = companyName;
+        this.address = address;
+        this.spots = spots;
+        this.registeredUsers = users;
+    }
+
+    public ParkingLot(String name, String companyName, Address address, Set<Spot> spots) {
+        this.name = name;
+        this.companyName = companyName;
+        this.address = address;
+        this.spots = spots;
     }
 
     public String getName() {
@@ -64,29 +80,15 @@ public class ParkingLot {
         }
     }
 
-    public List<Zone> getZones() {
-        return zones;
+    public List<User> getRegisteredUsers() {
+        return registeredUsers;
     }
 
-    public void setZones(List<Zone> zones) {
-        if(zones == null) {
-            throw new RuntimeException("ParkingLot zones should not be null");
-        } else if(zones.isEmpty()) {
-            throw new RuntimeException("ParkingLot zones should not be empty");
-        } else {
-            this.zones = zones;
-        }
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
+    public void setRegisteredUsers(List<User> users) {
         if(users == null) {
             throw new RuntimeException("ParkingLot users should not be null");
         } else {
-            this.users = users;
+            this.registeredUsers = users;
         }
     }
 

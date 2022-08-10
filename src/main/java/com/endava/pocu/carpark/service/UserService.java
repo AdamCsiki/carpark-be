@@ -1,98 +1,116 @@
 package com.endava.pocu.carpark.service;
 
+import com.endava.pocu.carpark.entity.ParkingLot;
 import com.endava.pocu.carpark.entity.Spot;
-import com.endava.pocu.carpark.repository.SpotRepository;
+import com.endava.pocu.carpark.entity.User;
+import com.endava.pocu.carpark.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SpotService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
     @Autowired
-    private SpotRepository spotRepository;
+    private UserRepository userRepository;
 
-    /**
-     * <b>POST method</b> for the Spot entity
-     * @param spot
-     */
-    public void postSpot(final Spot spot) {
-        LOGGER.info("Trying to post spot: " + spot);
-        if(spot == null) {
+    public void postUser(final User user) {
+        LOGGER.info("Trying to post user: " + user);
+        if(user == null) {
             LOGGER.info("Failed");
             throw new RuntimeException();
         } else {
-            spotRepository.save(spot);
+            userRepository.save(user);
         }
     }
 
-    /**
-     * <b>GET method</b> for the Spot entity
-     * @param id
-     * @return Spot or exception
-     */
-    public Spot getSpot(Long id) {
-        LOGGER.info("Trying to get spot: " + id);
+    public User getUser(Long id) {
+        LOGGER.info("Trying to get user: " + id);
         if(id == null) {
             LOGGER.info("Failed");
             throw new RuntimeException("ID is null");
         } else {
-            Optional<Spot> spot = spotRepository.findById(id);
+            Optional<User> user = userRepository.findById(id);
 
-            if(spot.isPresent()) {
+            if(user.isPresent()) {
                 LOGGER.info("Found");
-                return spot.get();
+                return user.get();
             } else {
                 LOGGER.info("Not found");
-                throw new RuntimeException("Could not find spot");
+                throw new RuntimeException("Could not find user");
             }
         }
     }
 
-    /**
-     * <b>GET ALL method</b> for the spot entity
-     * @return all parking lots
-     */
-    public List<Spot> getAllSpots() {
-        LOGGER.info("Trying to get all spots");
+    public List<User> getAllUsers() {
+        LOGGER.info("Trying to get all users");
 
-        final List<Spot> spots = new ArrayList<>();
-        spotRepository.findAll().forEach(spots::add);
+        final List<User> users = new ArrayList<>();
+        userRepository.findAll().forEach(users::add);
 
-        return spots;
+        return users;
     }
 
-    /**
-     * <b>PUT method</b> for the spot entity
-     * @param id
-     * @param spot
-     */
-    public void putSpot(final Long id, Spot spot) {
-        LOGGER.info("Trying to put a spot");
+    public void putUser(final Long id, User user) {
+        LOGGER.info("Trying to put a user");
 
-        Optional<Spot> oldSpot = spotRepository.findById(id);
-        spot.setSpot_id(id);
+        Optional<User> oldUser = userRepository.findById(id);
+        user.setId(id);
 
-        oldSpot.ifPresent(lot -> spotRepository.delete(lot));
+        oldUser.ifPresent(lot -> userRepository.delete(lot));
 
-        spotRepository.save(spot);
+        userRepository.save(user);
     }
 
-    public void deleteSpotById(Long id) {
-        Optional<Spot> spotOptional = spotRepository.findById(id);
-        spotOptional.ifPresent(spot -> spotRepository.delete(spot));
-    }
+    public void addSpotToUser(Spot spot, User user, LocalDateTime endTime) {
+        if(!spot.getUsed()) {
 
-    public void deleteSpot(Spot spot) {
-        if(spot == null) {
-            throw new RuntimeException("Can't delete null spot");
+            // adding the start date (now) and ending date to the parking slot that has been purchased
+            spot.setDateStart(LocalDateTime.now());
+            spot.setDateEnd(endTime);
+            //
+
+            // adding the spot to the users PurchasedSlots list
+            user.getPurchasedSpots().add(spot);
+            //
+
+            userRepository.save(user);
         } else {
-            spotRepository.delete(spot);
+            throw new RuntimeException("Spot is already in use.");
+        }
+    }
+
+    public void addParkingLotToUser(ParkingLot parkingLot, User user) {
+        user.getParkingLots().add(parkingLot);
+        userRepository.save(user);
+    }
+
+    public void removeSpotFromUser(Spot spot, User user) {
+        user.getPurchasedSpots().remove(spot);
+        userRepository.save(user);
+    }
+
+    public void removeParkingLotFromUser(ParkingLot parkingLot, User user) {
+        user.getParkingLots().remove(parkingLot);
+        userRepository.save(user);
+    }
+
+    public void deleteUserById(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        userOptional.ifPresent(user -> userRepository.delete(user));
+    }
+
+    public void deleteUser(User user) {
+        if(user == null) {
+            throw new RuntimeException("Can't delete null user");
+        } else {
+            userRepository.delete(user);
         }
     }
 }

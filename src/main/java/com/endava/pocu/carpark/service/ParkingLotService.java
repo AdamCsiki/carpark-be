@@ -1,6 +1,7 @@
 package com.endava.pocu.carpark.service;
 
 import com.endava.pocu.carpark.entity.ParkingLot;
+import com.endava.pocu.carpark.entity.User;
 import com.endava.pocu.carpark.repository.ParkingLotRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,5 +99,9 @@ public class ParkingLotService {
         } else {
             parkingLotRepository.delete(parkingLot);
         }
+    }
+
+    public void removeUserFromParkingLot(User user, ParkingLot parkingLot) {
+
     }
 }

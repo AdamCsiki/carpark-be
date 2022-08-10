@@ -8,10 +8,9 @@ import java.time.LocalDateTime;
 public class Spot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "spot_id")
     private Long id;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Double price;
 
     @Column(nullable = false)
@@ -22,6 +21,10 @@ public class Spot {
 
     @Column
     private LocalDateTime dateEnd;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "parking_id", nullable = false)
+    private ParkingLot parkingLot;
 
     public Spot() {
     }
@@ -65,11 +68,11 @@ public class Spot {
         this.dateEnd = dateEnd;
     }
 
-    public Long getSpot_id() {
+    public Long getId() {
         return id;
     }
 
-    public void setSpot_id(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

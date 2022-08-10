@@ -1,14 +1,17 @@
 package com.endava.pocu.carpark.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
     private Long id;
 
     @Column(length = 50)
@@ -17,29 +20,26 @@ public class User {
     @Column(length = 50)
     private String lastName;
 
-    @Column(nullable = false)
-    private Integer age;
-
-    @Column(nullable = true, length = 20)
-    private String email;
-
-    @Column(nullable = true)
-    private String phoneNumber;
-
-    @OneToOne(orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
 
-    @OneToMany
-    private List<Spot> spots;
+    @ManyToMany(mappedBy = "registeredUsers", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<ParkingLot> parkingLots = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Spot> purchasedSpots;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, Integer age, Address address) {
+    public User(String firstName, String lastName, Address address, Set<ParkingLot> parkingLots, List<Spot> purchasedSpots) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.age = age;
         this.address = address;
+        this.parkingLots = parkingLots;
+        this.purchasedSpots = purchasedSpots;
     }
 
     public String getFirstName() {
@@ -70,28 +70,6 @@ public class User {
         }
     }
 
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        if(age == null) {
-            throw new RuntimeException("User`s age should not be null.");
-        } else if(age < 18) {
-            throw new RuntimeException("User`s age should be over 18.");
-        } else {
-            this.age = age;
-        }
-    }
-
-    public Address getAddresses() {
-        return address;
-    }
-
-    public void setAddresses(Address address) {
-        this.address = address;
-    }
-
     public Long getId() {
         return id;
     }
@@ -100,27 +78,27 @@ public class User {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public List<Spot> getPurchasedSpots() {
+        return purchasedSpots;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPurchasedSpots(List<Spot> purchasedSpots) {
+        this.purchasedSpots = purchasedSpots;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public Set<ParkingLot> getParkingLots() {
+        return parkingLots;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setParkingLots(Set<ParkingLot> parkingLots) {
+        this.parkingLots = parkingLots;
     }
 
-    public List<Spot> getSpots() {
-        return spots;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setSpots(List<Spot> spots) {
-        this.spots = spots;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }

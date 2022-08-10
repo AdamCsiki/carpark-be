@@ -52,19 +52,4 @@ class ParkingLotTest {
         assertThatThrownBy(() -> parkingLot.setAddress(null)).hasMessage("ParkingLot address should not be null");
     }
 
-    @Test
-    void parkingLotZonesShouldThrowExceptionIfNull() {
-        assertThatThrownBy(() -> parkingLot.setZones(null)).hasMessage("ParkingLot zones should not be null");
-    }
-
-    @Test
-    void parkingLotZonesShouldThrowExceptionIfEmpty() {
-        assertThatThrownBy(() -> parkingLot.setZones(new ArrayList<>())).hasMessage("ParkingLot zones should not be empty");
-    }
-
-    @Test
-    void parkingLotUsersListShouldThrowExceptionIfNull() {
-        assertThatThrownBy(() -> parkingLot.setUsers(null)).hasMessage("ParkingLot users should not be null");
-    }
-
 }

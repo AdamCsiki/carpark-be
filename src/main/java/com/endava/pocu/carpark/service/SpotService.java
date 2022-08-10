@@ -1,5 +1,6 @@
 package com.endava.pocu.carpark.service;
 
+import com.endava.pocu.carpark.entity.ParkingLot;
 import com.endava.pocu.carpark.entity.Spot;
 import com.endava.pocu.carpark.repository.SpotRepository;
 import com.endava.pocu.carpark.repository.SpotRepository;
@@ -77,7 +78,7 @@ public class SpotService {
         LOGGER.info("Trying to put a spot");
 
         Optional<Spot> oldSpot = spotRepository.findById(id);
-        spot.setSpot_id(id);
+        spot.setId(id);
 
         oldSpot.ifPresent(lot -> spotRepository.delete(lot));
 
@@ -95,5 +96,15 @@ public class SpotService {
         } else {
             spotRepository.delete(spot);
         }
+    }
+
+    public List<Spot> getAllSpotsByParkingLot(ParkingLot parkingLot) {
+        final List<Spot> spotList = new ArrayList<>();
+        spotRepository.findAllByParkingLot(parkingLot).forEach((spot) -> spotList.add(spot));
+        return spotList;
+    }
+
+    public void deleteAllSpotsByParkingLot(ParkingLot parkingLot) {
+        spotRepository.deleteAllByParkingLot(parkingLot);
     }
 }

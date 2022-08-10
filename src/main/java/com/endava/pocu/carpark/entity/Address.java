@@ -1,20 +1,25 @@
 package com.endava.pocu.carpark.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Any;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "adresses")
+@Table(name = "addresses")
+@AllArgsConstructor
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "address_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(length = 30)
     private String city;
-    @Column(nullable = false)
+    @Column(length = 30)
     private String street;
-    @Column(nullable = false)
+    @Column
     private Integer number;
 
     public Address() {
