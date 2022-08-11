@@ -32,6 +32,7 @@ public class UserService {
 
     public User getUser(Long id) {
         LOGGER.info("Trying to get user: " + id);
+
         if(id == null) {
             LOGGER.info("Failed");
             throw new RuntimeException("ID is null");
@@ -87,7 +88,7 @@ public class UserService {
     }
 
     public void addParkingLotToUser(ParkingLot parkingLot, User user) {
-        user.getParkingLots().add(parkingLot);
+        user.getRegisteredInParkingLots().add(parkingLot);
         userRepository.save(user);
     }
 
@@ -97,7 +98,7 @@ public class UserService {
     }
 
     public void removeParkingLotFromUser(ParkingLot parkingLot, User user) {
-        user.getParkingLots().remove(parkingLot);
+        user.getRegisteredInParkingLots().remove(parkingLot);
         userRepository.save(user);
     }
 

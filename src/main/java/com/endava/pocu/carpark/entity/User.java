@@ -25,7 +25,7 @@ public class User {
 
     @ManyToMany(mappedBy = "registeredUsers", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<ParkingLot> parkingLots = new HashSet<>();
+    private Set<ParkingLot> registeredInParkingLots = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JsonIgnore
@@ -34,12 +34,20 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, Address address, Set<ParkingLot> parkingLots, List<Spot> purchasedSpots) {
+    public User(String firstName, String lastName, Address address, Set<ParkingLot> registeredInParkingLots, List<Spot> purchasedSpots) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
-        this.parkingLots = parkingLots;
+        this.registeredInParkingLots = registeredInParkingLots;
         this.purchasedSpots = purchasedSpots;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -48,9 +56,11 @@ public class User {
 
     public void setFirstName(String firstName) {
         if(firstName == null) {
-            throw new RuntimeException("User`s First Name should not be null.");
+            throw new RuntimeException("User firstName should not be null.");
         } else if(firstName.isBlank()) {
-            throw new RuntimeException("User`s First Name should not be blank.");
+            throw new RuntimeException("User firstName should not be blank.");
+        } else if(firstName.matches("[0-9]+") || firstName.matches("-[0-9]+")) {
+            throw new RuntimeException("User firstName should not contain numbers.");
         } else {
             this.firstName = firstName;
         }
@@ -62,36 +72,14 @@ public class User {
 
     public void setLastName(String lastName) {
         if(lastName == null) {
-            throw new RuntimeException("User`s Last Name should not be null.");
+            throw new RuntimeException("User lastName should not be null.");
         } else if(lastName.isBlank()) {
-            throw new RuntimeException("User`s Last Name should not be blank.");
+            throw new RuntimeException("User lastName should not be blank.");
+        } else if(lastName.matches("[0-9]+") || lastName.matches("-[0-9]+")) {
+            throw new RuntimeException("User lastName should not contain numbers.");
         } else {
             this.lastName = lastName;
         }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public List<Spot> getPurchasedSpots() {
-        return purchasedSpots;
-    }
-
-    public void setPurchasedSpots(List<Spot> purchasedSpots) {
-        this.purchasedSpots = purchasedSpots;
-    }
-
-    public Set<ParkingLot> getParkingLots() {
-        return parkingLots;
-    }
-
-    public void setParkingLots(Set<ParkingLot> parkingLots) {
-        this.parkingLots = parkingLots;
     }
 
     public Address getAddress() {
@@ -99,6 +87,33 @@ public class User {
     }
 
     public void setAddress(Address address) {
-        this.address = address;
+        if(address == null) {
+            throw new RuntimeException("User address should not be null.");
+        } else {
+            this.address = address;
+        }
+    }
+
+    public Set<ParkingLot> getRegisteredInParkingLots() {
+        return registeredInParkingLots;
+    }
+
+    public void setRegisteredInParkingLots(Set<ParkingLot> registeredInParkingLots) {
+        if(registeredInParkingLots == null) {
+            throw new RuntimeException("User registeredInParkingLots should not be null");
+        }
+        this.registeredInParkingLots = registeredInParkingLots;
+    }
+
+    public List<Spot> getPurchasedSpots() {
+        return purchasedSpots;
+    }
+
+    public void setPurchasedSpots(List<Spot> purchasedSpots) {
+        if(purchasedSpots == null) {
+            throw new RuntimeException("User purchasedSpots should not be null");
+        } else {
+            this.purchasedSpots = purchasedSpots;
+        }
     }
 }

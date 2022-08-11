@@ -1,9 +1,6 @@
 package com.endava.pocu.carpark.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Any;
 
 import javax.persistence.*;
 
@@ -39,7 +36,7 @@ public class Address {
         if (city != null) {
             this.city = city;
         } else {
-            throw new RuntimeException("Trying to set a NULL city.");
+            throw new RuntimeException("Address city should not be null");
         }
     }
 
@@ -51,7 +48,7 @@ public class Address {
         if(street != null) {
             this.street = street;
         } else {
-            throw new RuntimeException("Trying to set a NULL street name.");
+            throw new RuntimeException("Address street should not be null.");
         }
 
     }
@@ -62,9 +59,9 @@ public class Address {
 
     public void setNumber(Integer number) {
         if(number == null) {
-            throw new RuntimeException("Trying to set NULL street number.");
+            throw new RuntimeException("Address number should not be null.");
         } else if(number <= 0) {
-            throw new RuntimeException("Street number needs to be over 0.");
+            throw new RuntimeException("Address number needs to be over 0.");
         } else {
             this.number = number;
         }

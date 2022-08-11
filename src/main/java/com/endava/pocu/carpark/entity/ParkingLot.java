@@ -15,10 +15,10 @@ public class ParkingLot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 32)
+    @Column(length = 32, nullable = false)
     private String name;
 
-    @Column(length = 32)
+    @Column(length = 32, nullable = false)
     private String companyName;
 
     @OneToOne(cascade = CascadeType.ALL)

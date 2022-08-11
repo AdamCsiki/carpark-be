@@ -22,7 +22,7 @@ public class ParkingLotController {
     private UserService userService;
 
     @PostMapping(path = "/")
-    public void post(@RequestBody ParkingLot parkingLot) {
+    public void postParkingLot(@RequestBody ParkingLot parkingLot) {
         parkingLotService.postParkingLot(parkingLot);
     }
 
@@ -32,7 +32,7 @@ public class ParkingLotController {
     }
 
     @GetMapping(path = "/{id}/spots")
-    public List<Spot> getParkingLotSpots(@PathVariable Long id) {
+    public List<Spot> getAllParkingLotSpots(@PathVariable Long id) {
         return spotService.getAllSpotsByParkingLot(getParkingLot(id));
     }
 
@@ -47,7 +47,7 @@ public class ParkingLotController {
     }
 
     @PutMapping(path = "/{parkingId}/users/{userId}")
-    public void registerUser(@PathVariable Long parkingId, @PathVariable Long userId) {
+    public void putUserInParkingLot(@PathVariable Long parkingId, @PathVariable Long userId) {
         User user = userService.getUser(userId);
 
         ParkingLot parkingLot = parkingLotService.getParkingLot(parkingId);
@@ -57,7 +57,7 @@ public class ParkingLotController {
     }
 
     @PutMapping(path = "/{parkingId}/users")
-    public void registerUser(@PathVariable Long parkingId, @RequestBody User user) {
+    public void putUserInParkingLot(@PathVariable Long parkingId, @RequestBody User user) {
         ParkingLot parkingLot = parkingLotService.getParkingLot(parkingId);
         parkingLot.getRegisteredUsers().add(user);
         parkingLotService.postParkingLot(parkingLot);
@@ -73,4 +73,5 @@ public class ParkingLotController {
     public void deleteParkingLot(@RequestBody ParkingLot parkingLot) {
         parkingLotService.deleteParkingLot(parkingLot);
     }
+
 }

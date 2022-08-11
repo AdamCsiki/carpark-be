@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("users")
@@ -32,14 +33,19 @@ public class UserController {
         return userService.getUser(id);
     }
 
+    @GetMapping(path = "/")
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
     @GetMapping(path = "/{id}/spots")
     public List<Spot> getUserSpots(@PathVariable Long id) {
         return userService.getUser(id).getPurchasedSpots();
     }
 
-    @GetMapping(path = "/")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    @GetMapping(path = "/{id}/parkings")
+    public Set<ParkingLot> getUserRegisteredInParkingLots(@PathVariable Long id) {
+        return userService.getUser(id).getRegisteredInParkingLots();
     }
 
     @PutMapping(path = "/")
@@ -49,7 +55,7 @@ public class UserController {
 
     @PutMapping(path = "/{userId}/spots/{spotId}")
     public void putUserSpot(@PathVariable Long userId, @PathVariable Long spotId, @RequestBody LocalDateTime endTime) {
-        // get spot and user from the id'
+        // get spot and user from the id
         Spot spot = spotService.getSpot(spotId);
         User user = userService.getUser(userId);
 
