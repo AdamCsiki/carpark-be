@@ -85,11 +85,7 @@ public class ParkingLot {
     }
 
     public void setRegisteredUsers(List<User> users) {
-        if(users == null) {
-            throw new RuntimeException("ParkingLot users should not be null");
-        } else {
-            this.registeredUsers = users;
-        }
+        this.registeredUsers = users;
     }
 
     public Long getId() {
@@ -106,5 +102,13 @@ public class ParkingLot {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public Set<Spot> getSpots() {
+        return spots;
+    }
+
+    public void setSpots(Set<Spot> spots) {
+        this.spots = spots;
     }
 }

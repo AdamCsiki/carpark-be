@@ -101,8 +101,9 @@ public class User {
     public void setRegisteredInParkingLots(Set<ParkingLot> registeredInParkingLots) {
         if(registeredInParkingLots == null) {
             throw new RuntimeException("User registeredInParkingLots should not be null");
+        } else {
+            this.registeredInParkingLots = registeredInParkingLots;
         }
-        this.registeredInParkingLots = registeredInParkingLots;
     }
 
     public List<Spot> getPurchasedSpots() {

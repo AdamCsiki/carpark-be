@@ -1,5 +1,7 @@
 package com.endava.pocu.carpark.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -16,14 +18,14 @@ public class Spot {
     @Column(nullable = false)
     private Boolean used;
 
-    @Column
+    @Column(nullable = true)
     private LocalDateTime dateStart;
 
-    @Column
+    @Column(nullable = true)
     private LocalDateTime dateEnd;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "parking_id", nullable = false)
+    @JoinColumn(name = "parking_id")
     private ParkingLot parkingLot;
 
     public Spot() {

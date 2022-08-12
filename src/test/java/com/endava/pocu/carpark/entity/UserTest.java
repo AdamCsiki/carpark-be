@@ -128,7 +128,7 @@ class UserTest {
     }
 
     @Test
-    void purchasedSlotsShouldNotBeDiffrentFromInput() {
+    void purchasedSlotsShouldNotBeDifferentFromInput() {
         user.setPurchasedSpots(purchasedSlots);
         assertThat(user.getPurchasedSpots()).isEqualTo(purchasedSlots);
     }

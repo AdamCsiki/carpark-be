@@ -47,7 +47,7 @@ public class ParkingLotController {
     }
 
     @PutMapping(path = "/{parkingId}/users/{userId}")
-    public void putUserInParkingLot(@PathVariable Long parkingId, @PathVariable Long userId) {
+    public void putUserInParkingLotById(@PathVariable Long parkingId, @PathVariable Long userId) {
         User user = userService.getUser(userId);
 
         ParkingLot parkingLot = parkingLotService.getParkingLot(parkingId);
@@ -57,10 +57,17 @@ public class ParkingLotController {
     }
 
     @PutMapping(path = "/{parkingId}/users")
-    public void putUserInParkingLot(@PathVariable Long parkingId, @RequestBody User user) {
+    public void putUserInParkingLotBody(@PathVariable Long parkingId, @RequestBody User user) {
         ParkingLot parkingLot = parkingLotService.getParkingLot(parkingId);
         parkingLot.getRegisteredUsers().add(user);
         parkingLotService.postParkingLot(parkingLot);
+    }
+
+    @PutMapping(path = "/{parkinId}/spots/{spotId}")
+    public void putUserInParkingLot(@PathVariable Long parkingId, @PathVariable Long spotId) {
+        ParkingLot parkingLot = parkingLotService.getParkingLot(parkingId);
+        Spot spot = spotService.getSpot(spotId);
+        parkingLotService.putSpotInParkingLot(parkingLot, spot);
     }
 
 
